@@ -6,9 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node dist/app.js",
-    "dev": "ts-node --esm src/app.ts",
+    "dev": "tsx src/app.ts",
+    "dev:watch": "tsx watch src/app.ts",
     "build": "tsc",
-     "test": "node --no-warnings=ExperimentalWarning --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --no-warnings=ExperimentalWarning --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --no-warnings=ExperimentalWarning --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "clean": "rm -rf dist"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +19,9 @@
   "description": "",
   "dependencies": {
     "express": "^4.21.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
@@ -27,6 +32,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
 }
