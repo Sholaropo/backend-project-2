@@ -12,10 +12,10 @@ app.get("/health", (req, res) => {
   res.status(200).send("Server is healthy");
 });
 
-// if (import.meta.url === new URL(process.argv[1], 'file:').href) {
+if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
   });
-// }
+}
 
 export default app;
