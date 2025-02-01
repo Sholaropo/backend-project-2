@@ -16,4 +16,26 @@ export default {
     ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  roots: ["<rootDir>/test"],
+  testMatch: ["<rootDir>/test/**/*.test.ts"],
+  verbose: true,
+  forceExit: true,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+  coverageDirectory: "coverage",
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/test/fixtures/",
+    "/test/setup.ts",
+  ],
+  coverageReporters: ["text", "lcov", "clover"],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
 };
