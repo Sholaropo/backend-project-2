@@ -4,6 +4,7 @@ import * as logger from "@utils/logger";
 import mongoose from "mongoose";
 import cors from "cors";
 import employeesRouter from "@routes/employee";
+import branchesRouter from "@routes/branch";
 
 require("express-async-errors");
 
@@ -24,6 +25,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/employees", employeesRouter);
+app.use("/api/branches", employeesRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");

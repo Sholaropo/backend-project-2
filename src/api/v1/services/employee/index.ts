@@ -1,5 +1,4 @@
 const Employee = require("../../models/employee");
-import { EmployeeType } from "types";
 
 export const employeesService = {
   create: async (employeeData: any) => {
@@ -20,5 +19,10 @@ export const employeesService = {
   update: async (id: string, updatedData: any) => {
     const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {new: true});
     return updatedEmployee;
+  },
+
+  delete: async (id: string) => {
+    const isEmployeeDeleted = await Employee.findByIdAndRemove(id);
+    return isEmployeeDeleted
   },
 };

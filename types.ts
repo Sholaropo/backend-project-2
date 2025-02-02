@@ -7,3 +7,10 @@ export type EmployeeType = {
   phone: string;
   branch: string;
 };
+
+export type BranchType = {
+    id: string;
+    name: string;
+    address: string;
+    phone: string;
+}
