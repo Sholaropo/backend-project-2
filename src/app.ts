@@ -5,6 +5,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import employeesRouter from "@routes/employee";
 import branchesRouter from "@routes/branch";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../swagger';
+import morgan from "morgan";
 
 require("express-async-errors");
 
@@ -23,13 +26,11 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("combined"));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use("/api/employees", employeesRouter);
-app.use("/api/branches", branchesRouter);
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+app.use("/api/v1/employees", employeesRouter);
+app.use("/api/v1/branches", branchesRouter);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);

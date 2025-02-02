@@ -1,4 +1,4 @@
-const Branch = require("../../models/branch");
+const Branch = require("../models/branch");
 
 export const branchesService = {
   create: async (branchData: any) => {
