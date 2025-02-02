@@ -8,29 +8,43 @@ export const employeesService = {
 
   readAll: async () => {
     const employees = await Employee.find({}).populate("branch", {
-        name: 1,
-        address: 1,
-        phone: 1
+      name: 1,
+      address: 1,
+      phone: 1,
     });
     return employees;
   },
 
   readSingle: async (id: string) => {
     const employee = await Employee.findById(id).populate("branch", {
-        name: 1,
-        address: 1,
-        phone: 1
+      name: 1,
+      address: 1,
+      phone: 1,
     });
     return employee;
   },
 
   update: async (id: string, updatedData: any) => {
-    const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {new: true});
+    const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
     return updatedEmployee;
   },
 
   delete: async (id: string) => {
     const isEmployeeDeleted = await Employee.findByIdAndRemove(id);
-    return isEmployeeDeleted
+    return isEmployeeDeleted;
+  },
+
+  getByBranch: async (branchId: string) => {
+    const employees = await Employee.find({ branch: branchId }).populate(
+      "branch",
+      {
+        name: 1,
+        address: 1,
+        phone: 1,
+      }
+    );
+    return employees;
   },
 };

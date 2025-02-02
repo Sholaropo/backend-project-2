@@ -1,22 +1,27 @@
 import { employeesService } from "@services/employee";
+import { Request, Response } from "express";
+
+interface BranchParams {
+  branchId: string;
+}
 
 export const employeesController = {
-  create: async (req: any, res: any) => {
+  create: async (req: Request, res: Response) => {
     const employee = await employeesService.create(req.body);
     res.status(201).json(employee);
   },
 
-  readAll: async (req: any, res: any) => {
+  readAll: async (req: Request, res: Response) => {
     const employees = await employeesService.readAll();
     res.json(employees);
   },
 
-  readSingle: async (req: any, res: any) => {
+  readSingle: async (req: Request, res: Response) => {
     const employee = await employeesService.readSingle(req.params.id);
     res.json(employee);
   },
 
-  update: async (req: any, res: any) => {
+  update: async (req: Request, res: Response) => {
     const updatedEmployee = await employeesService.update(
       req.params.id,
       req.body
@@ -24,10 +29,16 @@ export const employeesController = {
     res.json(updatedEmployee);
   },
 
-  delete: async (req: any, res: any) => {
+  delete: async (req: Request, res: Response) => {
     const isEmployeeDeleted = await employeesService.delete(req.params.id);
     if (isEmployeeDeleted) {
       res.status(204).end();
     }
+  },
+
+  getByBranch: async (req: Request<BranchParams>, res: Response) => {
+    const { branchId } = req.params;
+    const employees = await employeesService.getByBranch(branchId);
+    res.json(employees);
   },
 };
