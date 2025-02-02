@@ -6,7 +6,7 @@ export const unknownEndpoint = (request: Request, response: Response): void => {
 };
 
 export const errorHandler = (
-    error: any,
+    error: Error,
     request: Request,
     response: Response,
     next: NextFunction

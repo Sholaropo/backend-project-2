@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738536685984" clover="3.2.0">
-  <project timestamp="1738536685984" name="All files">
+<coverage generated="1738538149133" clover="3.2.0">
+  <project timestamp="1738538149134" name="All files">
     <metrics statements="153" coveredstatements="129" conditionals="19" coveredconditionals="8" methods="33" coveredmethods="24" elements="205" coveredelements="161" complexity="0" loc="153" ncloc="153" packages="6" files="13" classes="13"/>
     <package name="src">
       <metrics statements="30" coveredstatements="27" conditionals="1" coveredconditionals="0" methods="3" coveredmethods="1"/>
@@ -91,9 +91,9 @@
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
-        <line num="20" count="43" type="stmt"/>
-        <line num="21" count="43" type="stmt"/>
-        <line num="22" count="43" type="stmt"/>
+        <line num="20" count="65" type="stmt"/>
+        <line num="21" count="65" type="stmt"/>
+        <line num="22" count="65" type="stmt"/>
         <line num="26" count="2" type="stmt"/>
       </file>
       <file name="employee.ts" path="C:\Users\adeoy\OneDrive\Desktop\Sholly\backend-project-2\src\api\v1\models\employee.ts">
@@ -101,9 +101,9 @@
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="30" count="2" type="stmt"/>
-        <line num="32" count="11" type="stmt"/>
-        <line num="33" count="11" type="stmt"/>
-        <line num="34" count="11" type="stmt"/>
+        <line num="32" count="17" type="stmt"/>
+        <line num="33" count="17" type="stmt"/>
+        <line num="34" count="17" type="stmt"/>
         <line num="38" count="2" type="stmt"/>
       </file>
     </package>

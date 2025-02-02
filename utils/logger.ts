@@ -1,11 +1,11 @@
-export const info = (...params: unknown[]) => {
+export const info = (...params: unknown[]): void => {
     if (process.env.NODE_ENV !== 'test') {
-        console.log(...params)
+        console.log(...params);
     }
-}
+};
 
-export const error = (...params: unknown[]) => {
+export const error = (...params: unknown[]): void => {
     if (process.env.NODE_ENV !== 'test') {
-        console.error(...params)
+        console.error(...params);
     }
-}
+};

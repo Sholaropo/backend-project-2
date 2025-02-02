@@ -1,19 +1,32 @@
 import { branchesService } from "../services/branch";
 import { Request, Response } from "express";
 
-export const branchesController = {
-  create: async (req: Request, res: Response) => {
-    const branch = await branchesService.create(req.body);
+interface Branch {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+}
+
+export const branchesController: {
+  create: (req: Request, res: Response) => Promise<void>;
+  readAll: (req: Request, res: Response) => Promise<void>;
+  readSingle: (req: Request, res: Response) => Promise<void>;
+  update: (req: Request, res: Response) => Promise<void>;
+  delete: (req: Request, res: Response) => Promise<void>;
+} = {
+  create: async (req: Request, res: Response): Promise<void> => {
+    const branch: Branch = await branchesService.create(req.body);
     res.status(201).json(branch);
   },
 
-  readAll: async (req: Request, res: Response) => {
-    const branches = await branchesService.readAll();
+  readAll: async (req: Request, res: Response): Promise<void> => {
+    const branches: Branch[] = await branchesService.readAll();
     res.json(branches);
   },
 
-  readSingle: async (req: Request, res: Response) => {
-    const branch = await branchesService.readSingle(req.params.id);
+  readSingle: async (req: Request, res: Response): Promise<void> => {
+    const branch: Branch | null = await branchesService.readSingle(req.params.id);
     if (branch) {
       res.json(branch);
     } else {
@@ -21,13 +34,13 @@ export const branchesController = {
     }
   },
 
-  update: async (req: Request, res: Response) => {
-    const updatedBranch = await branchesService.update(req.params.id, req.body);
+  update: async (req: Request, res: Response): Promise<void> => {
+    const updatedBranch: Branch = await branchesService.update(req.params.id, req.body);
     res.json(updatedBranch);
   },
 
-  delete: async (req: Request, res: Response) => {
-    const isBranchDeleted = await branchesService.delete(req.params.id);
+  delete: async (req: Request, res: Response): Promise<void> => {
+    const isBranchDeleted: boolean = await branchesService.delete(req.params.id);
     if (isBranchDeleted) {
       res.status(204).end();
     }

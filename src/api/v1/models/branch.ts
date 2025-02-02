@@ -1,6 +1,14 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const schema = new mongoose.Schema({
+interface IBranch {
+  name: string;
+  address: string;
+  phone: string;
+}
+
+interface IBranchDocument extends IBranch, Document {}
+
+const schema: Schema<IBranchDocument> = new Schema({
   name: {
     type: String,
     required: true,
@@ -16,11 +24,11 @@ const schema = new mongoose.Schema({
 });
 
 schema.set("toJSON", {
-  transform: (document: Document, returnedObject: Record<string, any>) => {
+  transform: (document: Document, returnedObject: any) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
   },
 });
 
-module.exports = mongoose.model("Branch", schema);
+export const BranchModel = mongoose.model<IBranchDocument>("Branch", schema);

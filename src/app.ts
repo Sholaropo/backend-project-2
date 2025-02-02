@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import { PORT, MONGODB_URI } from "../utils/config";
 import * as logger from "../utils/logger";
 import mongoose from "mongoose";
