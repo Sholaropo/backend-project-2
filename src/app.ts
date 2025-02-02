@@ -25,7 +25,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/employees", employeesRouter);
-app.use("/api/branches", employeesRouter);
+app.use("/api/branches", branchesRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");

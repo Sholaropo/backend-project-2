@@ -7,12 +7,20 @@ export const employeesService = {
   },
 
   readAll: async () => {
-    const employees = await Employee.find({});
+    const employees = await Employee.find({}).populate("branch", {
+        name: 1,
+        address: 1,
+        phone: 1
+    });
     return employees;
   },
 
   readSingle: async (id: string) => {
-    const employee = await Employee.findById(id);
+    const employee = await Employee.findById(id).populate("branch", {
+        name: 1,
+        address: 1,
+        phone: 1
+    });
     return employee;
   },
 
