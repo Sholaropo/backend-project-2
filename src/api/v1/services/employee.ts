@@ -1,7 +1,16 @@
 const Employee = require("../models/employee");
 
+interface EmployeeData {
+  name: string;
+  position: string;
+  department: string;
+  email: string;
+  phone: string;
+  branch: string;
+}
+
 export const employeesService = {
-  create: async (employeeData: any) => {
+  create: async (employeeData: EmployeeData) => {
     const newEmployee = new Employee(employeeData);
     return await newEmployee.save();
   },
@@ -24,7 +33,7 @@ export const employeesService = {
     return employee;
   },
 
-  update: async (id: string, updatedData: any) => {
+  update: async (id: string, updatedData: Partial<EmployeeData>) => {
     const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {
       new: true,
     });

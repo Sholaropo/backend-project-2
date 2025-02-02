@@ -1,7 +1,13 @@
 const Branch = require("../models/branch");
 
+interface BranchData {
+  name: string;
+  address: string;
+  phone: string;
+}
+
 export const branchesService = {
-  create: async (branchData: any) => {
+  create: async (branchData: BranchData) => {
     const newBranch = new Branch(branchData);
     return await newBranch.save();
   },
@@ -16,13 +22,15 @@ export const branchesService = {
     return branch;
   },
 
-  update: async (id: string, updatedData: any) => {
-    const updatedBranch = await Branch.findByIdAndUpdate(id, updatedData, {new: true});
+  update: async (id: string, updatedData: Partial<BranchData>) => {
+    const updatedBranch = await Branch.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
     return updatedBranch;
   },
 
   delete: async (id: string) => {
     const isBranchDeleted = await Branch.findByIdAndRemove(id);
-    return isBranchDeleted
+    return isBranchDeleted;
   },
 };
