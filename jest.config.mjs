@@ -1,35 +1,30 @@
 import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import tsParser from "@typescript-eslint/parser";
+import * as tseslint from "typescript-eslint";
 import { fileURLToPath } from "url";
 import path from "path";
 
+// eslint-disable-next-line @typescript-eslint/typedef
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default tseslint.config(
+export default [
   {
-    ignores: [
-      "**/dist/*",
-      "**coverage/*",
-      "**.github/*",
-      "eslint.config.mjs",
-      "jest.config.ts",
-    ],
+    ignores: ["**/dist/*", "**/coverage/*", "**/.github/*"],
   },
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
+  // For .mjs files
   {
+    files: ["**/*.mjs"],
+    ...eslint.configs.recommended,
+  },
+  // For TypeScript files
+  {
+    files: ["**/*.ts"],
+    ...tseslint.configs.recommended,
     languageOptions: {
-      parser: tsParser,
+      parser: tseslint.parser,
       parserOptions: {
         tsconfigRootDir: __dirname,
       },
     },
-  },
-  {
-    files: ["./**/*.ts", "./**/*.tsx"],
-  },
-  {
     rules: {
       "@typescript-eslint/explicit-function-return-type": "error",
       "@typescript-eslint/no-unused-vars": [
@@ -49,5 +44,5 @@ export default tseslint.config(
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-var-requires": "off",
     },
-  }
-);
+  },
+];
