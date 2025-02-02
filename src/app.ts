@@ -1,24 +1,34 @@
-import morgan from "morgan";
-import express, { Express } from "express";
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './config/swagger.js';
+import express, { Express, Request, Response } from "express";
+import { PORT, MONGODB_URI } from "@utils/config";
+import * as logger from "@utils/logger";
+import mongoose from "mongoose";
+import cors from "cors";
+import employeesRouter from "@routes/employee";
 
-const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+require("express-async-errors");
 
 const app: Express = express();
 
-app.use(express.json());
-app.use(morgan("combined"));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+mongoose.set("strictQuery", false);
+logger.info("connecting to", MONGODB_URI);
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    logger.info("connected to MongoDB");
+  })
+  .catch((error) => {
+    logger.error("error connecting to MongoDB:", error.message);
+  });
 
-app.get("/health", (req, res) => {
-  res.status(200).send("Server is healthy");
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/employees", employeesRouter);
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Express + TypeScript Server");
 });
 
-if (process.env.NODE_ENV !== "test") {
-  app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-  });
-}
-
-export default app;
+app.listen(PORT, () => {
+  console.log(`[server]: Server is running at http://localhost:${PORT}`);
+});
