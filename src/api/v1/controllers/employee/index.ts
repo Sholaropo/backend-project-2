@@ -13,5 +13,9 @@ export const employeesController = {
     const employee = await employeesService.readSingle(req.params.id);
     res.json(employee);
   },
+  update: async (req: any, res: any) => {
+    const updatedEmployee = await employeesService.update(req.params.id, req.body);
+    res.json(updatedEmployee);
+  },
 
 };
