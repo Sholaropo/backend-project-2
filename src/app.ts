@@ -1,11 +1,11 @@
 import morgan from "morgan";
-import express from "express";
+import express, { Express } from "express";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 
-const port = process.env.PORT || 3000;
+const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-const app = express();
+const app: Express = express();
 
 app.use(express.json());
 app.use(morgan("combined"));
