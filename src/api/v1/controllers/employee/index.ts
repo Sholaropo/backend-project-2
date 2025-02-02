@@ -5,6 +5,10 @@ interface BranchParams {
   branchId: string;
 }
 
+interface DepartmentParams {
+  departmentName: string;
+}
+
 export const employeesController = {
   create: async (req: Request, res: Response) => {
     const employee = await employeesService.create(req.body);
@@ -39,6 +43,13 @@ export const employeesController = {
   getByBranch: async (req: Request<BranchParams>, res: Response) => {
     const { branchId } = req.params;
     const employees = await employeesService.getByBranch(branchId);
+    res.json(employees);
+  },
+
+  getByDepartment: async (req: Request<DepartmentParams>, res: Response) => {
+    const { departmentName } = req.params;
+    const decodedDepartment = decodeURIComponent(departmentName);
+    const employees = await employeesService.getByDepartment(decodedDepartment);
     res.json(employees);
   },
 };

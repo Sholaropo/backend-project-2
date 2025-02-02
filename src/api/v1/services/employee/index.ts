@@ -47,4 +47,18 @@ export const employeesService = {
     );
     return employees;
   },
+
+  getByDepartment: async (departmentName: string) => {
+    const employees = await Employee.find({
+      department: {
+        $regex: new RegExp(departmentName, "i"),
+      },
+    }).populate("branch", {
+      name: 1,
+      address: 1,
+      phone: 1,
+    });
+
+    return employees;
+  },
 };
