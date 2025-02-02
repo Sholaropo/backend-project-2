@@ -1,4 +1,4 @@
-import { employeesController } from '@controllers/employee'
+import { employeesController } from '../controllers/employee'
 import express from 'express'
 const router = express.Router()
 

@@ -1,4 +1,4 @@
-import { branchesService } from "@services/branch";
+import { branchesService } from "../services/branch";
 import { Request, Response } from "express";
 
 export const branchesController = {
@@ -14,14 +14,15 @@ export const branchesController = {
 
   readSingle: async (req: Request, res: Response) => {
     const branch = await branchesService.readSingle(req.params.id);
-    res.json(branch);
+    if (branch) {
+      res.json(branch);
+    } else {
+      res.status(404).end();
+    }
   },
 
   update: async (req: Request, res: Response) => {
-    const updatedBranch = await branchesService.update(
-      req.params.id,
-      req.body
-    );
+    const updatedBranch = await branchesService.update(req.params.id, req.body);
     res.json(updatedBranch);
   },
 

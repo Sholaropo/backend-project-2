@@ -1,4 +1,4 @@
-import { branchesController } from '@controllers/branch'
+import { branchesController } from '../controllers/branch'
 import express from 'express'
 const router = express.Router()
 

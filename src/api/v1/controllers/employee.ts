@@ -1,4 +1,4 @@
-import { employeesService } from "@services/employee";
+import { employeesService } from "../services/employee";
 import { Request, Response } from "express";
 
 interface BranchParams {
@@ -22,7 +22,11 @@ export const employeesController = {
 
   readSingle: async (req: Request, res: Response) => {
     const employee = await employeesService.readSingle(req.params.id);
-    res.json(employee);
+    if (employee) {
+      res.json(employee);
+    } else {
+      res.status(404).end();
+    }
   },
 
   update: async (req: Request, res: Response) => {
