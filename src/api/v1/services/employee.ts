@@ -1,73 +1,86 @@
-const Employee = require("../models/employee");
+import { EmployeeModel, IEmployeeDocument } from "../models/employee";
 
 interface EmployeeData {
-  name: string;
-  position: string;
-  department: string;
-  email: string;
-  phone: string;
-  branch: string;
+ name: string;
+ position: string;
+ department: string;
+ email: string;
+ phone: string;
+ branch: string;
 }
 
-export const employeesService = {
-  create: async (employeeData: EmployeeData) => {
-    const newEmployee = new Employee(employeeData);
-    return await newEmployee.save();
-  },
+interface IEmployeeService {
+ create: (employeeData: EmployeeData) => Promise<IEmployeeDocument>;
+ readAll: () => Promise<IEmployeeDocument[]>;
+ readSingle: (id: string) => Promise<IEmployeeDocument | null>;
+ update: (id: string, updatedData: Partial<EmployeeData>) => Promise<IEmployeeDocument | null>;
+ delete: (id: string) => Promise<IEmployeeDocument | null>;
+ getByBranch: (branchId: string) => Promise<IEmployeeDocument[]>;
+ getByDepartment: (departmentName: string) => Promise<IEmployeeDocument[]>;
+}
 
-  readAll: async () => {
-    const employees = await Employee.find({}).populate("branch", {
-      name: 1,
-      address: 1,
-      phone: 1,
-    });
-    return employees;
-  },
+export const employeesService: IEmployeeService = {
+ create: async (employeeData: EmployeeData): Promise<IEmployeeDocument> => {
+   const newEmployee: IEmployeeDocument = new EmployeeModel(employeeData);
+   return await newEmployee.save();
+ },
 
-  readSingle: async (id: string) => {
-    const employee = await Employee.findById(id).populate("branch", {
-      name: 1,
-      address: 1,
-      phone: 1,
-    });
-    return employee;
-  },
+ readAll: async (): Promise<IEmployeeDocument[]> => {
+   const employees: IEmployeeDocument[] = await EmployeeModel.find({}).populate("branch", {
+     name: 1,
+     address: 1,
+     phone: 1,
+   });
+   return employees;
+ },
 
-  update: async (id: string, updatedData: Partial<EmployeeData>) => {
-    const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
-    return updatedEmployee;
-  },
+ readSingle: async (id: string): Promise<IEmployeeDocument | null> => {
+   const employee: IEmployeeDocument | null = await EmployeeModel.findById(id).populate("branch", {
+     name: 1,
+     address: 1,
+     phone: 1,
+   });
+   return employee;
+ },
 
-  delete: async (id: string) => {
-    const isEmployeeDeleted = await Employee.findByIdAndRemove(id);
-    return isEmployeeDeleted;
-  },
+ update: async (id: string, updatedData: Partial<EmployeeData>): Promise<IEmployeeDocument | null> => {
+   const updatedEmployee: IEmployeeDocument | null = await EmployeeModel.findByIdAndUpdate(
+     id, 
+     updatedData, 
+     {
+       new: true,
+       runValidators: true,
+     }
+   );
+   return updatedEmployee;
+ },
 
-  getByBranch: async (branchId: string) => {
-    const employees = await Employee.find({ branch: branchId }).populate(
-      "branch",
-      {
-        name: 1,
-        address: 1,
-        phone: 1,
-      }
-    );
-    return employees;
-  },
+ delete: async (id: string): Promise<IEmployeeDocument | null> => {
+   const deletedEmployee: IEmployeeDocument | null = await EmployeeModel.findByIdAndRemove(id);
+   return deletedEmployee;
+ },
 
-  getByDepartment: async (departmentName: string) => {
-    const employees = await Employee.find({
-      department: {
-        $regex: new RegExp(departmentName, "i"),
-      },
-    }).populate("branch", {
-      name: 1,
-      address: 1,
-      phone: 1,
-    });
+ getByBranch: async (branchId: string): Promise<IEmployeeDocument[]> => {
+   const employees: IEmployeeDocument[] = await EmployeeModel.find({ branch: branchId })
+     .populate("branch", {
+       name: 1,
+       address: 1,
+       phone: 1,
+     });
+   return employees;
+ },
 
-    return employees;
-  },
+ getByDepartment: async (departmentName: string): Promise<IEmployeeDocument[]> => {
+   const employees: IEmployeeDocument[] = await EmployeeModel.find({
+     department: {
+       $regex: new RegExp(departmentName, "i"),
+     },
+   }).populate("branch", {
+     name: 1,
+     address: 1,
+     phone: 1,
+   });
+
+   return employees;
+ },
 };

@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IBranch {
   name: string;
@@ -6,29 +6,39 @@ interface IBranch {
   phone: string;
 }
 
-interface IBranchDocument extends IBranch, Document {}
+export interface IBranchDocument extends IBranch, Document {}
 
-const schema: Schema<IBranchDocument> = new Schema({
+const branchSchema: Schema<IBranchDocument> = new Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
   },
   address: {
     type: String,
     required: true,
+    trim: true,
   },
   phone: {
     type: String,
     required: true,
+    trim: true,
   }
 });
 
-schema.set("toJSON", {
-  transform: (document: Document, returnedObject: any) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
+interface ITransformedBranch extends Omit<IBranch, '_id'> {
+  id: string;
+}
+
+branchSchema.set("toJSON", {
+  transform: (_document: Document, returnedObject: Record<string, unknown>): ITransformedBranch => {
+    return {
+      id: returnedObject._id?.toString() ?? '',
+      name: returnedObject.name as string,
+      address: returnedObject.address as string,
+      phone: returnedObject.phone as string
+    };
   },
 });
 
-export const BranchModel = mongoose.model<IBranchDocument>("Branch", schema);
+export const BranchModel: Model<IBranchDocument> = mongoose.model<IBranchDocument>("Branch", branchSchema);
