@@ -23,6 +23,20 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
 };
 
 /**
+ * @description Get a single employee by ID.
+ * @param {string} id - The ID of the employee to retrieve.
+ * @returns {Promise<Employee>}
+ * @throws {Error} If the employee with the given ID is not found.
+ */
+export const getEmployeeById = async (id: string): Promise<Employee> => {
+  const employee = employees.find((e) => e.id === id);
+  if (!employee) {
+    throw new Error(`Employee with ID ${id} not found`);
+  }
+  return employee;
+};
+
+/**
  * @description Get employees by branch ID.
  * @param {string} branchId - The ID of the branch.
  * @returns {Promise<Employee[]>}

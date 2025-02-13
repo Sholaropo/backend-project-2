@@ -22,6 +22,24 @@ export const getAllBranches = async (
 };
 
 /**
+ * @description Get a single branch by ID.
+ * @route GET /:id
+ * @returns {Promise<void>}
+ */
+export const getBranchById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const branch: Branch = await branchService.getBranchById(req.params.id);
+        res.status(200).json({ message: "Branch Retrieved", data: branch });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
  * @description Create a new branch.
  * @route POST /
  * @returns {Promise<void>}

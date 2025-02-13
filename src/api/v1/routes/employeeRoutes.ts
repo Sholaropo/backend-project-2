@@ -10,6 +10,12 @@ const router: Router = express.Router();
 router.get("/", employeeController.getAllEmployees);
 
 /**
+ * @route GET /:id
+ * @description Get a single employee by ID.
+ */
+router.get("/:id", employeeController.getEmployeeById);
+
+/**
  * @route GET /branch/:branchId
  * @description Get all employees in a specific branch.
  */

@@ -20,6 +20,20 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 };
 
 /**
+ * @description Get a single branch by ID.
+ * @param {string} id - The ID of the branch to retrieve.
+ * @returns {Promise<Branch>}
+ * @throws {Error} If the branch with the given ID is not found.
+ */
+export const getBranchById = async (id: string): Promise<Branch> => {
+  const branch = branches.find((b) => b.id === id);
+  if (!branch) {
+    throw new Error(`Branch with ID ${id} not found`);
+  }
+  return branch;
+};
+
+/**
  * @description Create a new branch.
  * @param {{ name: string; address: string; phone: string; }} branch - The branch data.
  * @returns {Promise<Branch>}

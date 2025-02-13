@@ -10,6 +10,12 @@ const router: Router = express.Router();
 router.get("/", branchController.getAllBranches);
 
 /**
+ * @route GET /:id
+ * @description Get a single branch by ID.
+ */
+router.get("/:id", branchController.getBranchById);
+
+/**
  * @route POST /
  * @description Create a new branch.
  */
