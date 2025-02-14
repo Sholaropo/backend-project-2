@@ -1,5 +1,7 @@
 import express, { Router } from "express";
 import * as employeeController from "../controllers/employeeController";
+import { validateRequest } from "../middleware/validate";
+import { employeeSchema, deleteEmployeeSchema } from "../validation/employeeValidation";
 
 const router: Router = express.Router();
 
@@ -229,7 +231,7 @@ router.get("/department/:department", employeeController.getEmployeesByDepartmen
  *       400:
  *         description: Invalid input data
  */
-router.post("/", employeeController.createEmployee);
+router.post("/", validateRequest(employeeSchema), employeeController.createEmployee);
 
 /**
  * @route PUT /:id
@@ -269,7 +271,7 @@ router.post("/", employeeController.createEmployee);
  *       200:
  *         description: The updated employee
  */
-router.put("/:id", employeeController.updateEmployee);
+router.put("/:id", validateRequest(employeeSchema), employeeController.updateEmployee);
 
 /**
  * @route DELETE /:id
@@ -293,6 +295,6 @@ router.put("/:id", employeeController.updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", employeeController.deleteEmployee);
+router.delete("/:id", validateRequest(deleteEmployeeSchema), employeeController.deleteEmployee);
 
 export default router;

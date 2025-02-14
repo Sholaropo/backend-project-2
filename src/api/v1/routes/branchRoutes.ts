@@ -1,5 +1,7 @@
 import express, { Router } from "express";
 import * as branchController from "../controllers/branchController";
+import { validateRequest } from "../middleware/validate";
+import { branchSchema, deleteBranchSchema } from "../validation/branchValidation";
 
 const router: Router = express.Router();
 
@@ -114,7 +116,7 @@ router.get("/:id", branchController.getBranchById);
  *       400:
  *         description: Invalid input data
  */
-router.post("/", branchController.createBranch);
+router.post("/", validateRequest(branchSchema), branchController.createBranch);
 
 /**
  * @route PUT /:id
@@ -149,7 +151,7 @@ router.post("/", branchController.createBranch);
  *       200:
  *         description: The updated branch
  */
-router.put("/:id", branchController.updateBranch);
+router.put("/:id", validateRequest(branchSchema), branchController.updateBranch);
 
 /**
  * @route DELETE /:id
@@ -173,6 +175,6 @@ router.put("/:id", branchController.updateBranch);
  *       404:
  *         description: Branch not found
  */
-router.delete("/:id", branchController.deleteBranch);
+router.delete("/:id", validateRequest(deleteBranchSchema), branchController.deleteBranch);
 
 export default router;
