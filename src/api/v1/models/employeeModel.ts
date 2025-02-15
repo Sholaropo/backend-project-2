@@ -11,5 +11,5 @@ export type Employee = {
     phone: string;
     branchId: string;
     createdAt: Date;
-    updatedAd: Date;
+    updatedAt: Date;
 };
