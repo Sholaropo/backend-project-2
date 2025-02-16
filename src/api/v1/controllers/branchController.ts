@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import * as branchService from "../services/branchService";
 import type { Branch } from "../services/branchService";
+import { successResponse } from "../models/responseModel";
+import { HTTP_STATUS } from "../../../constants/httpConstants";
 
 /**
  * @description Get all branches.
@@ -15,7 +17,7 @@ export const getAllBranches = async (
     try {
         const branches: Branch[] = await branchService.getAllBranches();
 
-        res.status(200).json({ message: "Branches Retrieved", data: branches });
+        res.status(HTTP_STATUS.OK).json(successResponse(branches, "Branches Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -33,7 +35,7 @@ export const getBranchById = async (
 ): Promise<void> => {
     try {
         const branch: Branch = await branchService.getBranchById(req.params.id);
-        res.status(200).json({ message: "Branch Retrieved", data: branch });
+        res.status(HTTP_STATUS.OK).json(successResponse(branch, "Branch Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -52,7 +54,7 @@ export const createBranch = async (
     try {
         const newBranch: Branch = await branchService.createBranch(req.body);
 
-        res.status(201).json({ message: "Branch Created", data: newBranch });
+        res.status(HTTP_STATUS.CREATED).json(successResponse(newBranch, "Branch Created"));
     } catch (error) {
         next(error);
     }
@@ -74,7 +76,7 @@ export const updateBranch = async (
             req.body
         );
 
-        res.status(200).json({ message: "Branch Updated", data: updatedBranch });
+        res.status(HTTP_STATUS.OK).json(successResponse(updatedBranch, "Branch Updated"));
     } catch (error) {
         next(error);
     }
@@ -93,7 +95,7 @@ export const deleteBranch = async (
     try {
         await branchService.deleteBranch(req.params.id);
 
-        res.status(200).json({ message: "Branch Deleted" });
+        res.status(HTTP_STATUS.OK).json(successResponse("Branch Deleted"));
     } catch (error) {
         next(error);
     }

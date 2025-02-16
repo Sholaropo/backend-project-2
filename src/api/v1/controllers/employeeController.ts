@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import * as employeeService from "../services/employeeService";
 import type { Employee } from "../services/employeeService";
+import { successResponse } from "../models/responseModel";
+import { HTTP_STATUS } from "../../../constants/httpConstants";
 
 /**
  * @description Get all employees.
@@ -15,7 +17,7 @@ export const getAllEmployees = async (
     try {
         const employees: Employee[] = await employeeService.getAllEmployees();
 
-        res.status(200).json({ message: "Employees Retrieved", data: employees });
+        res.status(HTTP_STATUS.OK).json(successResponse(employees, "Employees Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -33,7 +35,7 @@ export const getEmployeeById = async (
 ): Promise<void> => {
     try {
         const employee: Employee = await employeeService.getEmployeeById(req.params.id);
-        res.status(200).json({ message: "Employee Retrieved", data: employee });
+        res.status(HTTP_STATUS.OK).json(successResponse(employee, "Employee Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -54,7 +56,7 @@ export const getEmployeesByBranch = async (
             req.params.branchId
         );
 
-        res.status(200).json({ message: "Employees Retrieved", data: employees });
+        res.status(HTTP_STATUS.OK).json(successResponse(employees, "Employees Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -75,7 +77,7 @@ export const getEmployeesByDepartment = async (
             req.params.department
         );
 
-        res.status(200).json({ message: "Employees Retrieved", data: employees });
+        res.status(HTTP_STATUS.OK).json(successResponse(employees, "Employees Retrieved"));
     } catch (error) {
         next(error);
     }
@@ -95,7 +97,7 @@ export const createEmployee = async (
     try {
         const newEmployee: Employee = await employeeService.createEmployee(req.body);
 
-        res.status(201).json({ message: "Employee Created", data: newEmployee });
+        res.status(HTTP_STATUS.CREATED).json(successResponse(newEmployee, "Employee Created"));
     } catch (error) {
         next(error);
     }
@@ -117,7 +119,7 @@ export const updateEmployee = async (
             req.body
         );
 
-        res.status(200).json({ message: "Employee Updated", data: updatedEmployee });
+        res.status(HTTP_STATUS.OK).json(successResponse(updatedEmployee, "Employee Updated"));
     } catch (error) {
         next(error);
     }
@@ -136,7 +138,7 @@ export const deleteEmployee = async (
     try {
         await employeeService.deleteEmployee(req.params.id);
 
-        res.status(200).json({ message: "Employee Deleted" });
+        res.status(HTTP_STATUS.OK).json(successResponse("Employee Deleted"));
     } catch (error) {
         next(error);
     }
