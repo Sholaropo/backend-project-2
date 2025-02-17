@@ -1,25 +1,28 @@
-/**
- * @interface Employee
- * @description Represents an employee object.
- */
-export type Employee = {
-  id: string;
-  name: string;
-  position: string;
-  department: string;
-  email: string;
-  phone: string;
-  branchId: string;
-};
+import { Employee } from "../models/employeeModel";
+import {
+  getDocuments,
+  createDocument,
+  updateDocument,
+  deleteDocument,
+  getDocumentById,
+  queryDocumentsByField,
+} from "../repositories/firestoreRepository";
 
-const employees: Employee[] = [];
+const COLLECTION = "employees";
 
 /**
  * @description Get all employees.
  * @returns {Promise<Employee[]>}
  */
 export const getAllEmployees = async (): Promise<Employee[]> => {
-  return employees;
+  const snapshot: FirebaseFirestore.QuerySnapshot = await getDocuments(
+    COLLECTION
+  );
+
+  return snapshot.docs.map((doc) => {
+    const data: FirebaseFirestore.DocumentData = doc.data();
+    return { id: doc.id, ...data } as Employee;
+  });
 };
 
 /**
@@ -29,11 +32,15 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  * @throws {Error} If the employee with the given ID is not found.
  */
 export const getEmployeeById = async (id: string): Promise<Employee> => {
-  const employee = employees.find((e) => e.id === id);
-  if (!employee) {
+  const doc: FirebaseFirestore.DocumentSnapshot = await getDocumentById(
+    COLLECTION,
+    id
+  );
+  if (!doc.exists) {
     throw new Error(`Employee with ID ${id} not found`);
   }
-  return employee;
+  const data: FirebaseFirestore.DocumentData | undefined = doc.data();
+  return { id: doc.id, ...data } as Employee;
 };
 
 /**
@@ -41,8 +48,19 @@ export const getEmployeeById = async (id: string): Promise<Employee> => {
  * @param {string} branchId - The ID of the branch.
  * @returns {Promise<Employee[]>}
  */
-export const getEmployeesByBranch = async (branchId: string): Promise<Employee[]> => {
-  return employees.filter((employee) => employee.branchId === branchId);
+export const getEmployeesByBranch = async (
+  branchId: string
+): Promise<Employee[]> => {
+  const snapshot: FirebaseFirestore.QuerySnapshot = await queryDocumentsByField(
+    COLLECTION,
+    "branchId",
+    branchId
+  );
+
+  return snapshot.docs.map((doc) => {
+    const data: FirebaseFirestore.DocumentData = doc.data();
+    return { id: doc.id, ...data } as Employee;
+  });
 };
 
 /**
@@ -50,55 +68,46 @@ export const getEmployeesByBranch = async (branchId: string): Promise<Employee[]
  * @param {string} department - The department name.
  * @returns {Promise<Employee[]>}
  */
-export const getEmployeesByDepartment = async (department: string): Promise<Employee[]> => {
-  return employees.filter((employee) => employee.department.toLowerCase() === department.toLowerCase());
+export const getEmployeesByDepartment = async (
+  department: string
+): Promise<Employee[]> => {
+  const snapshot: FirebaseFirestore.QuerySnapshot = await queryDocumentsByField(
+    COLLECTION,
+    "department",
+    department
+  );
+
+  return snapshot.docs.map((doc) => {
+    const data: FirebaseFirestore.DocumentData = doc.data();
+    return { id: doc.id, ...data } as Employee;
+  });
 };
 
 /**
  * @description Create a new employee.
- * @param {{ name: string; position: string; department: string; email: string; phone: string; branchId: string; }} employee - The employee data.
+ * @param {Partial<Employee>} employee - The employee data.
  * @returns {Promise<Employee>}
  */
-export const createEmployee = async (employee: {
-  name: string;
-  position: string;
-  department: string;
-  email: string;
-  phone: string;
-  branchId: string;
-}): Promise<Employee> => {
-  const newEmployee: Employee = { id: Date.now().toString(), ...employee };
-
-  employees.push(newEmployee);
-  return newEmployee;
+export const createEmployee = async (
+  employee: Partial<Employee>
+): Promise<Employee> => {
+  const id: string = await createDocument(COLLECTION, employee);
+  return { id, ...employee } as Employee;
 };
 
 /**
  * @description Update an existing employee.
  * @param {string} id - The ID of the employee to update.
- * @param {{ name: string; position: string; department: string; email: string; phone: string; branchId: string; }} employee - The updated employee data.
+ * @param {Partial<Employee>} employee - The updated employee data.
  * @returns {Promise<Employee>}
  * @throws {Error} If the employee with the given ID is not found.
  */
 export const updateEmployee = async (
   id: string,
-  employee: {
-    name: string;
-    position: string;
-    department: string;
-    email: string;
-    phone: string;
-    branchId: string;
-  }
+  employee: Partial<Employee>
 ): Promise<Employee> => {
-  const index: number = employees.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error(`Employee with ID ${id} not found`);
-  }
-
-  employees[index] = { id, ...employee };
-
-  return employees[index];
+  await updateDocument(COLLECTION, id, employee);
+  return { id, ...employee } as Employee;
 };
 
 /**
@@ -108,10 +117,5 @@ export const updateEmployee = async (
  * @throws {Error} If the employee with the given ID is not found.
  */
 export const deleteEmployee = async (id: string): Promise<void> => {
-  const index: number = employees.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error(`Employee with ID ${id} not found`);
-  }
-
-  employees.splice(index, 1);
+  await deleteDocument(COLLECTION, id);
 };

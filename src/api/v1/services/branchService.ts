@@ -1,22 +1,27 @@
-/**
- * @interface Branch
- * @description Represents a branch object.
- */
-export type Branch = {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-};
+import { Branch } from "../models/branchModel";
+import {
+  getDocuments,
+  createDocument,
+  updateDocument,
+  deleteDocument,
+  getDocumentById,
+} from "../repositories/firestoreRepository";
 
-const branches: Branch[] = [];
+const COLLECTION = "branches";
 
 /**
  * @description Get all branches.
  * @returns {Promise<Branch[]>}
  */
 export const getAllBranches = async (): Promise<Branch[]> => {
-  return branches;
+  const snapshot: FirebaseFirestore.QuerySnapshot = await getDocuments(
+    COLLECTION
+  );
+
+  return snapshot.docs.map((doc) => {
+    const data: FirebaseFirestore.DocumentData = doc.data();
+    return { id: doc.id, ...data } as Branch;
+  });
 };
 
 /**
@@ -26,48 +31,42 @@ export const getAllBranches = async (): Promise<Branch[]> => {
  * @throws {Error} If the branch with the given ID is not found.
  */
 export const getBranchById = async (id: string): Promise<Branch> => {
-  const branch = branches.find((b) => b.id === id);
-  if (!branch) {
+  const doc: FirebaseFirestore.DocumentSnapshot = await getDocumentById(
+    COLLECTION,
+    id
+  );
+  if (!doc.exists) {
     throw new Error(`Branch with ID ${id} not found`);
   }
-  return branch;
+  const data: FirebaseFirestore.DocumentData | undefined = doc.data();
+  return { id: doc.id, ...data } as Branch;
 };
 
 /**
  * @description Create a new branch.
- * @param {{ name: string; address: string; phone: string; }} branch - The branch data.
+ * @param {Partial<Branch>} branch - The branch data.
  * @returns {Promise<Branch>}
  */
-export const createBranch = async (branch: {
-  name: string;
-  address: string;
-  phone: string;
-}): Promise<Branch> => {
-  const newBranch: Branch = { id: Date.now().toString(), ...branch };
-
-  branches.push(newBranch);
-  return newBranch;
+export const createBranch = async (
+  branch: Partial<Branch>
+): Promise<Branch> => {
+  const id: string = await createDocument(COLLECTION, branch);
+  return { id, ...branch } as Branch;
 };
 
 /**
  * @description Update an existing branch.
  * @param {string} id - The ID of the branch to update.
- * @param {{ name: string; address: string; phone: string; }} branch - The updated branch data.
+ * @param {Partial<Branch>} branch - The updated branch data.
  * @returns {Promise<Branch>}
  * @throws {Error} If the branch with the given ID is not found.
  */
 export const updateBranch = async (
   id: string,
-  branch: { name: string; address: string; phone: string }
+  branch: Partial<Branch>
 ): Promise<Branch> => {
-  const index: number = branches.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error(`Branch with ID ${id} not found`);
-  }
-
-  branches[index] = { id, ...branch };
-
-  return branches[index];
+    await updateDocument(COLLECTION, id, branch);
+    return { id, ...branch } as Branch;
 };
 
 /**
@@ -77,10 +76,5 @@ export const updateBranch = async (
  * @throws {Error} If the branch with the given ID is not found.
  */
 export const deleteBranch = async (id: string): Promise<void> => {
-  const index: number = branches.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error(`Branch with ID ${id} not found`);
-  }
-
-  branches.splice(index, 1);
+  await deleteDocument(COLLECTION, id);
 };
