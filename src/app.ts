@@ -1,5 +1,9 @@
 import express, { Express } from "express";
 import morgan from "morgan";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import setupSwagger from "../config/swagger";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
