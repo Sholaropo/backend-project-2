@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ import errorHandler from "./api/v1/middleware/errorHandler";
 
 const app: Express = express();
 
+app.use(helmet());
 setupSwagger(app);
 
 app.use(morgan("combined"));
