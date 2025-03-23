@@ -81,104 +81,54 @@ router.get("/:id", employeeController.getEmployeeById);
 router.get("/branch/:branchId", employeeController.getEmployeesByBranch);
 
 /**
- * @route GET /department/:department
- * @description Get all employees in a specific department.
- *
  * @openapi
- * /api/v1/employees/department/{department}:
+ * /employees/department/{department}:
  *   get:
- *     summary: Get all employees in a specific department
- *     tags: [Employees]
+ *     summary: Get employees by department
+ *     description: Retrieves all employees belonging to a specific department.
+ *     tags: [Employee]
  *     parameters:
  *       - in: path
  *         name: department
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: Name of the department to get employees from
+ *         description: The department name to filter employees
+ *         example: "Engineering"
  *     responses:
  *       200:
- *         description: List of employees in the specified department
+ *         description: Employees retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   position:
- *                     type: string
- *                   department:
- *                     type: string
- *                   email:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   branchId:
- *                     type: string
+ *                 $ref: '#/components/schemas/Employee'
+ *       404:
+ *         description: No employees found in the given department
  */
 router.get("/department/:department", employeeController.getEmployeesByDepartment);
 
 /**
- * @route POST /
- * @description Create a new employee.
- *
  * @openapi
- * /api/v1/employees:
+ * /employees:
  *   post:
  *     summary: Create a new employee
- *     tags: [Employees]
+ *     description: Adds a new employee to the system.
+ *     tags: [Employee]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - position
- *               - department
- *               - email
- *               - branchId
- *             properties:
- *               name:
- *                 type: string
- *               position:
- *                 type: string
- *               department:
- *                 type: string
- *               email:
- *                 type: string
- *               phone:
- *                 type: string
- *               branchId:
- *                 type: string
+ *             $ref: '#/components/schemas/Employee'
  *     responses:
  *       201:
- *         description: The created employee
+ *         description: Employee created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 name:
- *                   type: string
- *                 position:
- *                   type: string
- *                 department:
- *                   type: string
- *                 email:
- *                   type: string
- *                 phone:
- *                   type: string
- *                 branchId:
- *                   type: string
+ *               $ref: '#/components/schemas/Employee'
  *       400:
  *         description: Invalid input data
  */
