@@ -135,64 +135,58 @@ router.get("/department/:department", employeeController.getEmployeesByDepartmen
 router.post("/", validateRequest(employeeSchema), employeeController.createEmployee);
 
 /**
- * @route PUT /:id
- * @description Update an existing employee.
- *
  * @openapi
- * /api/v1/employees/{id}:
+ * /employees/{id}:
  *   put:
  *     summary: Update an existing employee
- *     tags: [Employees]
+ *     description: Modifies details of an existing employee.
+ *     tags: [Employee]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the employee to update
+ *         description: The unique ID of the employee to update
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               position:
- *                 type: string
- *               department:
- *                 type: string
- *               email:
- *                 type: string
- *               phone:
- *                 type: string
- *               branchId:
- *                 type: string
+ *             $ref: '#/components/schemas/Employee'
  *     responses:
  *       200:
- *         description: The updated employee
+ *         description: Employee updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Employee'
+ *       400:
+ *         description: Invalid input data
+ *       404:
+ *         description: Employee not found
  */
 router.put("/:id", validateRequest(employeeSchema), employeeController.updateEmployee);
 
 /**
- * @route DELETE /:id
- * @description Delete an employee.
- *
  * @openapi
- * /api/v1/employees/{id}:
+ * /employees/{id}:
  *   delete:
  *     summary: Delete an employee
- *     tags: [Employees]
+ *     description: Removes an employee from the system by their ID.
+ *     tags: [Employee]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the employee to delete
+ *         description: The unique ID of the employee to delete
  *     responses:
  *       200:
- *         description: Employee successfully deleted
+ *         description: Employee deleted successfully
+ *       400:
+ *         description: Invalid employee ID
  *       404:
  *         description: Employee not found
  */
