@@ -6,115 +6,73 @@ import { branchSchema, deleteBranchSchema } from "../validation/branchValidation
 const router: Router = express.Router();
 
 /**
- * @route GET /
- * @description Get all branches.
- *
  * @openapi
- * /api/v1/branches:
+ * /branches:
  *   get:
- *     summary: Get all branches
- *     tags: [Branches]
+ *     summary: Retrieve a list of all branches
+ *     description: Fetch all branches from the database.
+ *     tags: [Branch]
  *     responses:
  *       200:
- *         description: List of all branches
+ *         description: A list of branches retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   address:
- *                     type: string
- *                   phone:
- *                     type: string
+ *                 $ref: '#/components/schemas/Branch'
  */
 router.get("/", branchController.getAllBranches);
 
 /**
- * @route GET /:id
- * @description Get a single branch by ID.
- *
  * @openapi
- * /api/v1/branches/{id}:
+ * /branches/{id}:
  *   get:
- *     summary: Get a single branch by ID
- *     tags: [Branches]
+ *     summary: Retrieve a branch by its ID
+ *     description: Fetch a specific branch by its unique identifier.
+ *     tags: [Branch]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the branch to retrieve
+ *         description: The unique identifier of the branch
+ *         example: "branch_123abc"
  *     responses:
  *       200:
- *         description: The requested branch
+ *         description: The branch details retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 name:
- *                   type: string
- *                 address:
- *                   type: string
- *                 phone:
- *                   type: string
+ *               $ref: '#/components/schemas/Branch'
  *       404:
  *         description: Branch not found
  */
 router.get("/:id", branchController.getBranchById);
 
 /**
- * @route POST /
- * @description Create a new branch.
- *
  * @openapi
- * /api/v1/branches:
+ * /branches:
  *   post:
  *     summary: Create a new branch
- *     tags: [Branches]
+ *     description: Adds a new branch to the system.
+ *     tags: [Branch]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - address
- *             properties:
- *               name:
- *                 type: string
- *               address:
- *                 type: string
- *               phone:
- *                 type: string
+ *             $ref: '#/components/schemas/BranchInput'
  *     responses:
  *       201:
- *         description: The created branch
+ *         description: Branch created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 name:
- *                   type: string
- *                 address:
- *                   type: string
- *                 phone:
- *                   type: string
+ *               $ref: '#/components/schemas/Branch'
  *       400:
- *         description: Invalid input data
+ *         description: Invalid input
  */
 router.post("/", validateRequest(branchSchema), branchController.createBranch);
 
