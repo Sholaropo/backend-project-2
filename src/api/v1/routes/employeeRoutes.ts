@@ -52,47 +52,31 @@ router.get("/", employeeController.getAllEmployees);
 router.get("/:id", employeeController.getEmployeeById);
 
 /**
- * @route GET /branch/:branchId
- * @description Get all employees in a specific branch.
- *
  * @openapi
- * /api/v1/employees/branch/{branchId}:
+ * /employees/branch/{branchId}:
  *   get:
- *     summary: Get all employees in a specific branch
- *     tags: [Employees]
+ *     summary: Get employees by branch
+ *     description: Retrieves all employees that belong to a specific branch.
+ *     tags: [Employee]
  *     parameters:
  *       - in: path
  *         name: branchId
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the branch to get employees from
+ *         description: The unique identifier of the branch
+ *         example: "branch_123abc"
  *     responses:
  *       200:
- *         description: List of employees in the specified branch
+ *         description: Employees retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   position:
- *                     type: string
- *                   department:
- *                     type: string
- *                   email:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   branchId:
- *                     type: string
+ *                 $ref: '#/components/schemas/Employee'
  *       404:
- *         description: Branch not found
+ *         description: No employees found for the given branch
  */
 router.get("/branch/:branchId", employeeController.getEmployeesByBranch);
 
