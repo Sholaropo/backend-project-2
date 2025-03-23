@@ -63,7 +63,7 @@ router.get("/:id", branchController.getBranchById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/BranchInput'
+ *             $ref: '#/components/schemas/Branch'
  *     responses:
  *       201:
  *         description: Branch created successfully
@@ -77,59 +77,66 @@ router.get("/:id", branchController.getBranchById);
 router.post("/", validateRequest(branchSchema), branchController.createBranch);
 
 /**
- * @route PUT /:id
- * @description Update an existing branch.
- * @note This could be a bit of information I want to add
- *
  * @openapi
- * /api/v1/branches/{id}:
+ * /branches/{id}:
  *   put:
  *     summary: Update an existing branch
- *     tags: [Branches]
+ *     description: Updates the details of a specific branch by its ID.
+ *     tags: [Branch]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the branch to update
+ *         description: The unique identifier of the branch
+ *         example: "branch_123abc"
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               address:
- *                 type: string
- *               phone:
- *                 type: string
+ *             $ref: '#/components/schemas/Branch'
  *     responses:
  *       200:
- *         description: The updated branch
+ *         description: Branch updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Branch'
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: Branch not found
  */
 router.put("/:id", validateRequest(branchSchema), branchController.updateBranch);
 
 /**
- * @route DELETE /:id
- * @description Delete a branch.
- *
  * @openapi
- * /api/v1/branches/{id}:
+ * /branches/{id}:
  *   delete:
  *     summary: Delete a branch
- *     tags: [Branches]
+ *     description: Removes a branch from the system by its ID.
+ *     tags: [Branch]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the branch to delete
+ *         description: The unique identifier of the branch
+ *         example: "branch_123abc"
  *     responses:
  *       200:
- *         description: Branch successfully deleted
+ *         description: Branch deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Branch Deleted"
  *       404:
  *         description: Branch not found
  */
