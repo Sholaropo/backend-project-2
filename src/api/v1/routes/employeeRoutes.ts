@@ -6,79 +6,46 @@ import { employeeSchema, deleteEmployeeSchema } from "../validation/employeeVali
 const router: Router = express.Router();
 
 /**
- * @route GET /
- * @description Get all employees.
- *
  * @openapi
- * /api/v1/employees:
+ * /employees:
  *   get:
- *     summary: Get all employees
- *     tags: [Employees]
+ *     summary: Retrieve a list of employees
+ *     description: Fetches all employees from the system.
+ *     tags: [Employee]
  *     responses:
  *       200:
- *         description: List of all employees
+ *         description: A list of employees
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   position:
- *                     type: string
- *                   department:
- *                     type: string
- *                   email:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   branchId:
- *                     type: string
+ *                 $ref: '#/components/schemas/Employee'
  */
 router.get("/", employeeController.getAllEmployees);
 
 /**
- * @route GET /:id
- * @description Get a single employee by ID.
- *
  * @openapi
- * /api/v1/employees/{id}:
+ * /employees/{id}:
  *   get:
- *     summary: Get a single employee by ID
- *     tags: [Employees]
+ *     summary: Get an employee by ID
+ *     description: Fetches a single employee by their unique identifier.
+ *     tags: [Employee]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: ID of the employee to retrieve
+ *         description: The unique identifier of the employee
+ *         example: "employee_123abc"
  *     responses:
  *       200:
- *         description: The requested employee
+ *         description: Employee retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 name:
- *                   type: string
- *                 position:
- *                   type: string
- *                 department:
- *                   type: string
- *                 email:
- *                   type: string
- *                 phone:
- *                   type: string
- *                 branchId:
- *                   type: string
+ *               $ref: '#/components/schemas/Employee'
  *       404:
  *         description: Employee not found
  */
